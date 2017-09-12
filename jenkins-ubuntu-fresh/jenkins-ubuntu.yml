@@ -1,0 +1,5 @@
+---
+- hosts: jenkinsfresh
+  gather_facts: False
+  roles:
+    - jenkins-ubuntu
