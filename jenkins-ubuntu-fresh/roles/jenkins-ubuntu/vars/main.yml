@@ -35,6 +35,11 @@ mvn_url: http://mirror.stjschools.org/public/apache/maven/maven-3/3.3.9/binaries
 etcd_url: https://github.com/coreos/etcd/releases/download/v3.0.9/etcd-v3.0.9-linux-amd64.tar.gz
 
 
+
+libicu_url:  http://security.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3ubuntu0.6_amd64.deb
+
+libicufile: libicu52_52.1-3ubuntu0.6_amd64.deb
+
 # https://getcomposer.org/download/
 
 composer_url: https://getcomposer.org/composer.phar
