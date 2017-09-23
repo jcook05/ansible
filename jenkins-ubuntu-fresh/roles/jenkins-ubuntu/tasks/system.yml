@@ -168,14 +168,7 @@
   get_url: url={{kopsfile}} dest=/usr/bin/kops owner=root group=root mode=0755
 
 
-## as of 9/12/2017 .Net Core 2.0 requires libicu52
-## See file name and link in /vars/main.yml
 
-#- name: Get .Net Core Dependencies
-#  get_url: url={{libicu_url}} dest=/tmp/{{libicufile}} owner=root group=root mode=064
-
-#- name: install libicu52
-#  command: dpkg -i /tmp/{{libicufile}}
 
 ## Add Microsoft Key for .Net Core
 ## from:  https://www.microsoft.com/net/core#linuxubuntu
@@ -187,19 +180,9 @@
   command:  mv /tmp/microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
 
 
-
-#- name:  Add Microsoft Key
-#  apt_key:
-#    id: 473041FA
-#    url: https://packages.microsoft.com/keys/microsoft.asc
-#    keyring: /etc/apt/trusted.gpg.d/microsoft.gpg
-
-
 - name: dotnetdev.list
   file:  path=/etc/apt/sources.list.d/dotnetdev.list state=touch owner=root group=root mode=0755
     
-
-
 - name: Add Microsoft Repository
   lineinfile:
     dest:  /etc/apt/sources.list.d/dotnetdev.list
@@ -211,29 +194,6 @@
   with_items:
     - dotnet-sdk-2.0.0
 
- 
-#Linux Downloads here:  https://www.microsoft.com/net/download/linux
-#If using a specific version, may want to store in Cable Labs artifactory or elsewhere
-#- name: Get .Net Core
-#  get_url: url={{netcorelink}} dest=/tmp/{{netcorefile}} owner=root group=root mode=064
-
-#- name: Unlink dotnet
-#  file: src=/opt/dotnet/dotnet dest=/usr/bin/dotnet owner=root group=root state=absent  
-
-#- name: Remove /opt/dotnet
-#  file:  path=/opt/dotnet state=absent
-
-#- name: Make Directory /opt/dotnet
-#  file:  path=/opt/dotnet state=directory owner=jenkins group=jenkins
-
-#- name: Unarchive .Net Core
-#  unarchive: src=/tmp/{{netcorefile}} dest=/opt/dotnet remote_src=yes
-  
-#- name: Set dotnet permissions
-#  file:  path=/opt/dotnet owner=jenkins group=jenkins state=directory recurse=yes
-
-#- name: Link dotnet
-#  file: src=/opt/dotnet/dotnet dest=/usr/bin/dotnet owner=jenkins group=jenkins state=link
 
 - name: Create Packer ETC directory
   file: dest=/etc/packer state=directory mode=0755 owner=root group=root
