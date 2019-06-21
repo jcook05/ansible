@@ -1,0 +1,56 @@
+---
+- debug: var=ansible_facts
+## Install base packages
+- name: Install a list of packages
+  ignore_errors: False
+  apt:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+
+## Add Docker Key
+
+- name: Add Docker pgp key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+## Verify key
+- name: Verify fingerprint
+  command: apt-key fingerprint 0EBFCD88
+
+## Add Apt Repository
+- apt_repository:
+    
+    repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable'
+    state: absent
+
+
+## Add Apt Repository
+- apt_repository:
+    
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_distribution_release}} stable
+    
+    state: present
+
+- name: Install a list of packages
+  ignore_errors: False
+  apt:
+    update_cache: yes
+    name: ['docker-ce']
+    state: latest
+ 
+## Assumes python and pip is installed in your WSL environment. 
+- name: Install docker-compose
+  command:  pip install docker-compose
+
+## Link docker-ce with Docker for Windows
+## Will need to run this manually
+
+#- name:  Link docker-ce with Docker for Windows
+#  command:  echo "export DOCKER_HOST=tcp://localhost:2375" >> ~/.bashrc && source ~/.bashrc

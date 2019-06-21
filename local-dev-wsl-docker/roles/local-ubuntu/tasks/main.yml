@@ -1,0 +1,11 @@
+---
+
+## Unsure how to do Relative path
+#- stat: path=./system.yml
+#  register: optional_file
+#  when: optional_file.stat.exists
+#  ignore_errors: False
+#- include: system.yml
+#  when: system
+- include: system.yml
+- include: config.yml

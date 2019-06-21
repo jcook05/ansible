@@ -1,0 +1,88 @@
+---
+
+## Install base packages
+- name: Install a list of packages
+  ignore_errors: False
+  apt:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+     - unzip
+     - python-pip
+     - python3-pip
+     - python3-software-properties
+     - default-jre
+     - default-jdk
+     
+
+## Install NodeJs
+
+- name: Download Node.js setup script
+  get_url: url=https://deb.nodesource.com/setup_10.x dest=/opt mode=755
+
+- name: Setup Node.js
+  command: /opt/setup_10.x
+
+
+## Install nodejs
+#- name:  Install nodejs
+#  command: apt-get install nodejs
+
+
+### Configure and install Java
+- name: Install nodejs
+  apt: 
+    name: ['nodejs']
+    state: latest
+
+- name: Upgrade npm
+  command: npm -g install npm@latest
+   
+
+### Configure and install Java
+- name: Remove java-1.7.0-openjdk
+  apt: 
+    name: ['java-1.7.0-openjdk']
+    state: absent
+  
+## Install AWS tools
+- name:  Install boto3
+  command: pip install boto3
+
+- name:  Install cli53
+  command: pip install cli53
+
+- name:  Install awscli
+  command: pip install awscli
+
+## Need to add Amplify
+
+- name: Get Terraform
+  get_url: url=https://releases.hashicorp.com/terraform/0.12.0/{{terraformfile}} dest=/tmp/{{terraformfile}} owner=root group=root mode=0644
+
+- name: Extract Packer
+  get_url: url=https://releases.hashicorp.com/packer/1.4.1/{{packerfile}} dest=/tmp/{{packerfile}} owner=root group=root mode=0644
+
+- name: Unarchive Terraform
+  unarchive: src=/tmp/{{terraformfile}} dest=/usr/bin
+
+- name: Unarchive Packer
+  unarchive: src=/tmp/{{packerfile}} dest=/usr/bin
+
+- name: Get kubectl
+  get_url: url={{kubectlfile}} dest=/usr/bin/kubectl owner=root group=root mode=0755
+
+- name: Get etcd
+  get_url: url={{etcd_url}} dest=/tmp/etcd.tgz owner=root group=root mode=0644
+ 
+- name: unpack etcd
+  command: tar zxf /tmp/etcd.tgz --strip 1 -C /tmp
+
+- name: Move etcd
+  copy: src=/tmp/{{item}} dest=/usr/bin/{{item}} owner=root group=root mode=0755 remote_src=yes
+  with_items:
+   - etcd
+   - etcdctl
+
+
