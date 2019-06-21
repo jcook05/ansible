@@ -24,12 +24,6 @@
 - name: Setup Node.js
   command: /opt/setup_10.x
 
-
-## Install nodejs
-#- name:  Install nodejs
-#  command: apt-get install nodejs
-
-
 ### Configure and install Java
 - name: Install nodejs
   apt: 
